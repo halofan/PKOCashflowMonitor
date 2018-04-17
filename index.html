@@ -1,21 +1,38 @@
 <!DOCTYPE html>
 <html ng-app="PKOCM">
-<head lang="en">
+  <head lang="en">
     <meta charset="UTF-8">
     <title></title>
     <script src="js/lib/angular.min.js"></script>
     <script src="js/app.js"></script>
     <link href="css/style.css" type="text/css" rel="stylesheet">
-</head>
-<body ng-controller="MainController">
-    <div ng-repeat="operation in operations" ng-class="{'hidden': operation.visible}">
-        <div> {{ operation.exec_date }} </div>
-        <div> {{ operation.order_date }} </div>
-        <div> {{ operation.type }} </div>
-        <div> {{ operation.description }} </div>
-        <div> {{ operation.amount }} </div>
-        <div> {{ operation.ending_balance }} </div>
-        <input type="checkbox" ng-model="operation.visible" ng-checked="operation.visible"/>
+  </head>
+
+  <body ng-controller="MainController">
+    <div class="content">
+      <div class="oper-table">
+        <div class="oper-row titles">
+          <div class="oper-head"> Data wykonania</div>
+          <div class="oper-head"> Data zlecenia</div>
+          <div class="oper-head"> Typ operacji</div>
+          <div class="oper-head"> Opis operacji</div>
+          <div class="oper-head"> Wartość (zł)</div>
+          <div class="oper-head"> Saldo (zł)</div>
+          <div class="oper-head"> Ignoruj</div>
+        </div>
+        <div ng-repeat="operation in operations" ng-class="{'ignored-oper': operation.ignore}" class="oper-row">
+          <div class="oper-cell"> {{ operation.exec_date }}</div>
+          <div class="oper-cell"> {{ operation.order_date }}</div>
+          <div class="oper-cell"> {{ operation.type }}</div>
+          <div class="oper-cell oper-desc" ng-click="switchLimit(operation)"> {{ operation.description | limitTo: (operation.descLimit || 99999) }}</div>
+          <div class="oper-cell"> {{ operation.amount }}</div>
+          <div class="oper-cell"> {{ operation.ending_balance }}</div>
+          <div class="oper-cell">
+            <input type="checkbox" ng-model="operation.ignore" ng-click="ignoreChange(operation)"/>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
+    <script src="js/non_ang.js"></script>
+  </body>
 </html>
