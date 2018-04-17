@@ -1,0 +1,7 @@
+body {
+    background-color: silver;
+}
+
+.hidden {
+    opacity: 0.4;
+}
