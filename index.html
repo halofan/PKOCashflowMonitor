@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="PKOCM">
+<html ng-app="PKOCM" xmlns="http://www.w3.org/1999/html">
   <head lang="en">
     <meta charset="UTF-8">
     <title></title>
@@ -10,26 +10,58 @@
 
   <body ng-controller="MainController">
     <div class="content">
-      <div class="oper-table">
-        <div class="oper-row titles">
-          <div class="oper-head"> Data wykonania</div>
-          <div class="oper-head"> Data zlecenia</div>
-          <div class="oper-head"> Typ operacji</div>
-          <div class="oper-head"> Opis operacji</div>
-          <div class="oper-head"> Wartość (zł)</div>
-          <div class="oper-head"> Saldo (zł)</div>
-          <div class="oper-head"> Ignoruj</div>
+      <div class="oper-groups">
+        <div class="oper-group" ng-repeat="group in groups" ng-style="{background: group.color}">
+          {{ group.name }}
+          {{ groupSum(group) }}
+          <button ng-click="ignoreGroup(group)">Ignoruj</button>
         </div>
-        <div ng-repeat="operation in operations" ng-class="{'ignored-oper': operation.ignore}" class="oper-row">
+
+        <form class="new-group" ng-submit="createGroup()">
+          <label for="newGroupNameI">Nazwa grupy: </label>
+          <input id="newGroupNameI" type="text" ng-model="newGroupName" ng-required="true"/>
+          <input type="submit" title="Stwórz nową grupę z wybranych operacji" value="Stwórz"/>
+        </form>
+      </div>
+      <div class="oper-counter">
+        Operacji: {{ operations.length }}
+      </div>
+      <div class="oper-table">
+        <div class="oper-row">
+          <div class="oper-head"> Data wykonania </div>
+          <div class="oper-head"> Data zlecenia </div>
+          <div class="oper-head"> Typ operacji </div>
+          <div class="oper-head"> Opis operacji <span class="icons"><span class="icon" title="Rozwiń/zwiń wszystkie opisy">&#8661;</span></span> </div>
+          <div class="oper-head"> Wartość (zł) </div>
+          <div class="oper-head"> Saldo (zł) </div>
+          <div class="oper-head"> Ignoruj </div>
+          <div class="oper-head"> Wybierz </div>
+        </div>
+
+        <div ng-repeat="operation in operations" ng-class="{'ignored-oper': operation.ignored}" class="oper-row">
           <div class="oper-cell"> {{ operation.exec_date }}</div>
           <div class="oper-cell"> {{ operation.order_date }}</div>
           <div class="oper-cell"> {{ operation.type }}</div>
-          <div class="oper-cell oper-desc" ng-click="switchLimit(operation)"> {{ operation.description | limitTo: (operation.descLimit || 99999) }}</div>
-          <div class="oper-cell"> {{ operation.amount }}</div>
+          <div class="oper-cell oper-desc" ng-click="switchLimit(operation)" title="Rozwiń/zwiń opis"> {{ operation.description | limitTo: (operation.descLimit) }}</div>
+          <div class="oper-cell oper-amount" ng-class="{'positive': operation.amount > 0, 'negative': operation.amount < 0}"> {{ operation.amount }}</div>
           <div class="oper-cell"> {{ operation.ending_balance }}</div>
           <div class="oper-cell">
-            <input type="checkbox" ng-model="operation.ignore" ng-click="ignoreChange(operation)"/>
+            <input type="checkbox" ng-model="operation.ignored" ng-click="ignoredChange(operation)"/>
           </div>
+          <div class="oper-cell">
+            <input type="checkbox" ng-model="operation.marked"/>
+          </div>
+        </div>
+
+        <div class="oper-row">
+          <div class="oper-foot"></div>
+          <div class="oper-foot"></div>
+          <div class="oper-foot"></div>
+          <div class="oper-foot"></div>
+          <div class="oper-foot"> {{ amountSum() }} </div>
+          <div class="oper-foot"></div>
+          <div class="oper-foot"></div>
+          <div class="oper-foot"></div>
         </div>
       </div>
     </div>
