@@ -3,6 +3,7 @@
   <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <script src="js/lib/xml2json.js"></script>
     <script src="js/lib/angular.min.js"></script>
     <script src="js/app.js"></script>
     <link href="css/style.css" type="text/css" rel="stylesheet">
@@ -10,6 +11,7 @@
 
   <body ng-controller="MainController">
     <div class="content">
+
       <div class="oper-groups">
         <div class="oper-group" ng-repeat="group in groups" ng-style="{background: group.color}">
           {{ group.name }}
@@ -23,28 +25,46 @@
           <input type="submit" title="Stwórz nową grupę z wybranych operacji" value="Stwórz"/>
         </form>
       </div>
+
+      <div class="oper-desc-search">
+        Szukaj:
+        <input type="text" ng-model="byDescription"/>
+        <!--<a href="#" ng-click="()" title="Wybierz znalezione operacje">Wybierz</a>-->
+        <!--<a href="#" ng-click="()" title="Ingoruj znalezione operacje">Ignoruj</a>-->
+        <a href="#" ng-click="byDescription=undefinied" title="Wyczyść wpisaną frazę szukania">Wyczyść</a>
+      </div>
+
       <div class="oper-counter">
         Operacji: {{ operations.length }}
       </div>
+
       <div class="oper-table">
         <div class="oper-row">
           <div class="oper-head"> Data wykonania </div>
           <div class="oper-head"> Data zlecenia </div>
           <div class="oper-head"> Typ operacji </div>
-          <div class="oper-head"> Opis operacji <span class="icons"><span class="icon" title="Rozwiń/zwiń wszystkie opisy">&#8661;</span></span> </div>
+          <div class="oper-head"> Opis operacji
+            <span class="icons">
+              <span class="icon" title="Rozwiń/zwiń wszystkie opisy">&#8661;</span> <!--todo-->
+            </span>
+          </div>
           <div class="oper-head"> Wartość (zł) </div>
           <div class="oper-head"> Saldo (zł) </div>
           <div class="oper-head"> Ignoruj </div>
-          <div class="oper-head"> Wybierz </div>
+          <div class="oper-head"> Wybierz
+            <span class="icons">
+              <span class="icon" title="Wybierz wszystkie">&#8942;</span> <!--todo-->
+            </span>
+          </div>
         </div>
 
-        <div ng-repeat="operation in operations" ng-class="{'ignored-oper': operation.ignored}" class="oper-row">
-          <div class="oper-cell"> {{ operation.exec_date }}</div>
-          <div class="oper-cell"> {{ operation.order_date }}</div>
-          <div class="oper-cell"> {{ operation.type }}</div>
-          <div class="oper-cell oper-desc" ng-click="switchLimit(operation)" title="Rozwiń/zwiń opis"> {{ operation.description | limitTo: (operation.descLimit) }}</div>
-          <div class="oper-cell oper-amount" ng-class="{'positive': operation.amount > 0, 'negative': operation.amount < 0}"> {{ operation.amount }}</div>
-          <div class="oper-cell"> {{ operation.ending_balance }}</div>
+        <div ng-repeat="operation in operations | filter:{ description: byDescription }" ng-class="{'ignored-oper': operation.ignored}" class="oper-row">
+          <div class="oper-cell oper-date">{{ operation['exec-date'] }}</div>
+          <div class="oper-cell oper-date">{{ operation['order-date'] }}</div>
+          <div class="oper-cell">{{ operation.type }}</div>
+          <div class="oper-cell oper-desc" ng-click="switchLimit(operation)" title="Rozwiń/zwiń opis">{{ operation.description | limitTo: (operation.descLimit) }}</div>
+          <div class="oper-cell oper-amount" ng-class="{'positive': operation.amount > 0, 'negative': operation.amount < 0}">{{ operation.amount.__text }}</div>
+          <div class="oper-cell">{{ operation.ending_balance }}</div>
           <div class="oper-cell">
             <input type="checkbox" ng-model="operation.ignored" ng-click="ignoredChange(operation)"/>
           </div>

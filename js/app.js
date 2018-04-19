@@ -5,6 +5,7 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
   const NO_LIMIT = 999999;
 
   $scope.groups = [];
+  $scope.operations = [];
 
   $scope.createGroup = function() {
     $scope.groups.push(
@@ -21,7 +22,7 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
 
     for (var i = 0; i < operGroup.operations.length; i++) {
       var oper = operGroup.operations[i];
-      groupSum += oper.amount;
+      groupSum += +oper.amount.__text;
     }
 
     return groupSum;
@@ -36,11 +37,7 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
   };
 
   $scope.ignoredChange = function(operation) {
-    if (operation.ignored) {
-      operation.descLimit = NO_LIMIT;
-    } else {
-      operation.descLimit = DESC_LIMIT;
-    }
+    operation.descLimit = DESC_LIMIT;
   };
 
   $scope.amountSum = function() {
@@ -48,13 +45,13 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
 
     for (var i = 0; i < notIgnored.length; i++) {
       var oper = notIgnored[i];
-      sum += oper.amount;
+      sum += +oper.amount.__text;
     }
 
-    return sum;
+    return sum.toFixed(2);
   };
 
-    $scope.operations = [
+    /*$scope.operations = [
       {
         "exec_date": "2018-04-16",
         "order_date": "2018-04-14",
@@ -135,7 +132,7 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
         "amount": -14.00,
         "ending_balance": 40136.67
       }
-    ];
+    ];*/
 
   function getRandomLightColor() {
     var letters = 'BCDEF'.split('');
@@ -152,6 +149,26 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
       oper.descLimit = DESC_LIMIT;
     }
   }
+
+  function loadXMLDoc(dname) {
+    if (window.XMLHttpRequest) {
+      xhttp=new XMLHttpRequest();
+    }
+    else {
+      xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xhttp.open("GET",dname,false);
+    xhttp.send();
+    return xhttp.responseXML;
+  }
+
+
+  var xmlDoc = loadXMLDoc("data.xml");
+  var x2js = new X2JS();
+  var jsonObj = x2js.xml2json(xmlDoc);
+
+  $scope.operations = jsonObj['account-history'].operations.operation;
+  console.log($scope.operations[0]);
 
   initData();
 });

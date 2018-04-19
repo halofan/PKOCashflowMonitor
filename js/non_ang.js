@@ -1,4 +1,4 @@
-window.addEventListener('load', onLoad, false );
+/*window.addEventListener('load', onLoad, false );
 
 function onLoad() {
   var oper_descs = document.getElementsByClassName("oper-desc");
@@ -9,4 +9,4 @@ function onLoad() {
       e.preventDefault();
     }, false);
   }
-}
+} */
