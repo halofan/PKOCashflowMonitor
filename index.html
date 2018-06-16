@@ -5,14 +5,17 @@
     <title></title>
     <script src="js/lib/xml2json.js"></script>
     <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/chart.min.js"></script>
     <script src="js/app.js"></script>
     <link href="css/style.css" type="text/css" rel="stylesheet">
   </head>
 
   <body ng-controller="MainController">
     <div class="content">
+        <canvas id="chart"></canvas>
 
-      <div class="oper-groups">
+      <div class="oper-left-flower">
+        <div class="oper-groups">
         <div class="oper-group" ng-repeat="group in groups" ng-style="{background: group.color}">
           {{ group.name }}
           {{ groupSum(group) }}
@@ -24,6 +27,11 @@
           <input id="newGroupNameI" type="text" ng-model="newGroupName" ng-required="true"/>
           <input type="submit" title="Stwórz nową grupę z wybranych operacji" value="Stwórz"/>
         </form>
+      </div>
+
+        <div class="oper-sum">
+           Balans: {{ amountSum() }} PLN
+        </div>
       </div>
 
       <div class="oper-desc-search">
@@ -64,7 +72,7 @@
           <div class="oper-cell">{{ operation.type }}</div>
           <div class="oper-cell oper-desc" ng-click="switchLimit(operation)" title="Rozwiń/zwiń opis">{{ operation.description | limitTo: (operation.descLimit) }}</div>
           <div class="oper-cell oper-amount" ng-class="{'positive': operation.amount > 0, 'negative': operation.amount < 0}">{{ operation.amount.__text }}</div>
-          <div class="oper-cell">{{ operation.ending_balance }}</div>
+          <div class="oper-cell">{{ operation['ending-balance'].__text }}</div>
           <div class="oper-cell">
             <input type="checkbox" ng-model="operation.ignored" ng-click="ignoredChange(operation)"/>
           </div>
@@ -78,7 +86,7 @@
           <div class="oper-foot"></div>
           <div class="oper-foot"></div>
           <div class="oper-foot"></div>
-          <div class="oper-foot"> {{ amountSum() }} </div>
+          <div class="oper-foot"></div>
           <div class="oper-foot"></div>
           <div class="oper-foot"></div>
           <div class="oper-foot"></div>

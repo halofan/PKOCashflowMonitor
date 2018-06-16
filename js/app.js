@@ -144,10 +144,43 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
   }
 
   function initData() {
+      $scope.labels = [];
+      $scope.data = [];
+
+      // todo posortowac xml po order-date
     for (var i = 0; i < $scope.operations.length; i++) {
       var oper = $scope.operations[i];
       oper.descLimit = DESC_LIMIT;
+        $scope.data.unshift(+oper['ending-balance'].__text);
+        $scope.labels.unshift(oper['exec-date']);
     }
+
+      var ctx = document.getElementById("chart");
+      var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: $scope.labels,
+              datasets: [{
+                  data: $scope.data,
+                  backgroundColor: 'rgb(176, 255, 233, 0.41)',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              tooltips: {
+                  mode: 'index',
+                  intersect: false
+              },
+              legend: {
+                display: false
+              },
+              elements: {
+                  line: {
+                      tension: 0
+                  }
+              }
+          }
+      });
   }
 
   function loadXMLDoc(dname) {
