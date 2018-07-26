@@ -8,13 +8,35 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
   $scope.operations = [];
 
   $scope.createGroup = function() {
-    $scope.groups.push(
-      {
-        'name': $scope.newGroupName,
-        'operations': $scope.operations.filter(function(oper) { return oper.marked }),
-        'color': getRandomLightColor()
+    var groupOpers = $scope.operations.filter(function(oper) { return oper.marked });
+    var groupColor = getRandomLightColor();
+
+    var newGroup =
+    {
+      'name': $scope.newGroupName,
+      'operations': groupOpers,
+      'color': groupColor
+    };
+
+    for (var i = 0; i < groupOpers.length; i++) {
+      var oper = groupOpers[i];
+      if (oper.group) {
+        oper.group.operations.splice(oper.group.operations.indexOf(oper), 1);
+        if (oper.group.operations.length < 1) {
+          //$scope.groups.splice($scope.groups.indexOf(oper.group), 1);
+        }
       }
-    );
+      oper.group = newGroup;
+    }
+
+    $scope.groups.push(newGroup);
+  };
+
+  $scope.ignoreGroup = function(operGroup) {
+    for (var i = 0; i < operGroup.operations.length; i++) {
+      var oper = operGroup.operations[i];
+      oper.ignored = true;
+    }
   };
 
   $scope.groupSum = function(operGroup) {
@@ -49,6 +71,20 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
     }
 
     return sum.toFixed(2);
+  };
+
+  $scope.markFiltred = function() {
+    for (var i = 0; i < $scope.filteredOpers.length; i++) {
+      var oper = $scope.filteredOpers[i];
+      oper.marked = true;
+    }
+  };
+
+  $scope.unmarkFiltred = function() {
+    for (var i = 0; i < $scope.filteredOpers.length; i++) {
+      var oper = $scope.filteredOpers[i];
+      oper.marked = false;
+    }
   };
 
     /*$scope.operations = [
@@ -204,4 +240,31 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
   console.log($scope.operations[0]);
 
   initData();
+});
+
+pkoCashflowMonitorApp.directive('colorPicker', function () {
+  return {
+    require: '^ngModel',
+    scope: {
+      ngModel:'='
+    },
+    link: function (scope, element, attrs, ngModel) {
+      var input = element[0], box = document.createElement('div');
+
+      box.className = 'color-box';
+      box.style.backgroundColor = input.value;
+      box.setAttribute('data-color', input.value);
+      input.parentNode.insertBefore(box, input);
+      input.type = 'hidden';
+
+      var picker = new CP(box);
+      picker.set(scope.ngModel);
+
+      picker.on("change", function(color) {
+        ngModel.$setViewValue('#' + color);
+        scope.$apply();
+        this.target.style.backgroundColor = '#' + color;
+      });
+    }
+  }
 });

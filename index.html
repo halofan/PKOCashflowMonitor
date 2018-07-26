@@ -6,8 +6,10 @@
     <script src="js/lib/xml2json.js"></script>
     <script src="js/lib/angular.min.js"></script>
     <script src="js/lib/chart.min.js"></script>
+    <script src="js/lib/color-picker.min.js"></script>
     <script src="js/app.js"></script>
     <link href="css/style.css" type="text/css" rel="stylesheet">
+    <link href="css/color-picker.min.css" type="text/css" rel="stylesheet">
   </head>
 
   <body ng-controller="MainController">
@@ -15,22 +17,27 @@
         <canvas id="chart"></canvas>
 
       <div class="oper-left-flower">
-        <div class="oper-groups">
-        <div class="oper-group" ng-repeat="group in groups" ng-style="{background: group.color}">
-          {{ group.name }}
-          {{ groupSum(group) }}
-          <button ng-click="ignoreGroup(group)">Ignoruj</button>
-        </div>
-
         <form class="new-group" ng-submit="createGroup()">
           <label for="newGroupNameI">Nazwa grupy: </label>
           <input id="newGroupNameI" type="text" ng-model="newGroupName" ng-required="true"/>
           <input type="submit" title="Stwórz nową grupę z wybranych operacji" value="Stwórz"/>
         </form>
+        <hr ng-if="groups.length" class="oper-group-line">
+        <div class="oper-groups">
+        <div class="oper-group" ng-repeat="group in groups" ng-style="{background: group.color}">
+          <div class="oper-group-label">{{ group.name }} [<span title="Liczba operacji w grupie">{{group.operations.length}}</span>] ({{ groupSum(group) }} PLN)</div>
+          <div class="oper-group-buttons">
+            <button ng-click="ignoreGroup(group)">Ignoruj</button>
+            <div class="oper-group-color-picker" title="Zmień kolor grupy">
+              <input ng-model="group.color" color-picker>
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
       </div>
 
         <div class="oper-sum">
-           Balans: {{ amountSum() }} PLN
+           Całkowity balans: {{ amountSum() }} PLN
         </div>
       </div>
 
@@ -61,12 +68,13 @@
           <div class="oper-head"> Ignoruj </div>
           <div class="oper-head"> Wybierz
             <span class="icons">
-              <span class="icon" title="Wybierz wszystkie">&#8942;</span> <!--todo-->
+              <span class="icon oper-do" title="Wybierz wszystkie" ng-click="markFiltred()">&#8942;</span> <!--todo-->
+              <span class="icon oper-undo" title="Odznacz wszystkie" ng-click="unmarkFiltred()">&#8942;</span> <!--todo-->
             </span>
           </div>
         </div>
 
-        <div ng-repeat="operation in operations | filter:{ description: byDescription }" ng-class="{'ignored-oper': operation.ignored}" class="oper-row">
+        <div ng-repeat="operation in (filteredOpers = (operations | filter:{ description: byDescription }))" ng-class="{'ignored-oper': operation.ignored}" class="oper-row" ng-style="{'background-color': operation.group.color}">
           <div class="oper-cell oper-date">{{ operation['exec-date'] }}</div>
           <div class="oper-cell oper-date">{{ operation['order-date'] }}</div>
           <div class="oper-cell">{{ operation.type }}</div>
@@ -76,7 +84,7 @@
           <div class="oper-cell">
             <input type="checkbox" ng-model="operation.ignored" ng-click="ignoredChange(operation)"/>
           </div>
-          <div class="oper-cell">
+          <div class="oper-cell oper-cell-last">
             <input type="checkbox" ng-model="operation.marked"/>
           </div>
         </div>
@@ -91,6 +99,7 @@
           <div class="oper-foot"></div>
           <div class="oper-foot"></div>
         </div>
+        <div class="oper-row-last"></div>
       </div>
     </div>
     <script src="js/non_ang.js"></script>
