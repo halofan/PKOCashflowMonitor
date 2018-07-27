@@ -12,6 +12,13 @@ html {
   margin-bottom: -142px;
 }
 
+#chartWrap {
+  width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+
 .oper-table{
   display: table;
   width: 100%;

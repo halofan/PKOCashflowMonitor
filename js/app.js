@@ -7,6 +7,31 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
   $scope.groups = [];
   $scope.operations = [];
 
+  var xmlDoc = loadXMLDoc("data.xml");
+  var x2js = new X2JS();
+  var jsonObj = x2js.xml2json(xmlDoc);
+
+  $scope.operations = jsonObj['account-history'].operations.operation;
+  console.log($scope.operations[0]);
+
+  initData();
+
+  angular.element("#minAmountInput, #maxAmountInput").on("keypress keyup blur",function (event) {
+    angular.element(this).val(angular.element(this).val().replace(/[^0-9\.,-]/g,''));
+    angular.element(this).val(angular.element(this).val().replace(/[,]/g,'.'));
+
+    // todo na firefoxie which nie zadziala https://www.w3schools.com/jsref/event_key_keycode.asp
+    var val = angular.element(this).val();
+    if ((event.which != 46 || val.indexOf('.') != -1) &&
+      (event.which != 44 || val.indexOf('.') != -1) &&
+      (event.which != 45 || val.indexOf('-') != -1 || (event.which == 45 && val.length > 0)) &&
+      (event.which < 48 || event.which > 57)) {
+      event.preventDefault();
+    }
+  });
+
+  //------------------------------------------------
+
   $scope.createGroup = function() {
     var groupOpers = $scope.operations.filter(function(oper) { return oper.marked });
     var groupColor = getRandomLightColor();
@@ -87,6 +112,16 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
     }
   };
 
+  $scope.searchFilter = function(desc, min, max){
+    var reg = new RegExp(desc, "i");
+    return function(item){
+      var descCheck = isEmpty(desc) || item.description.match(reg);
+      var minAmountCheck = isEmpty(min) || parseFloat(item.amount.__text) >= parseFloat(min);
+      var maxAmountCheck = isEmpty(max) || parseFloat(item.amount.__text) <= parseFloat(max);
+
+      return descCheck && minAmountCheck && maxAmountCheck;
+    }
+  };
     /*$scope.operations = [
       {
         "exec_date": "2018-04-16",
@@ -179,6 +214,10 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
     return color;
   }
 
+  function isEmpty(val) {
+    return val === undefined || val === null || val === "";
+  }
+
   function initData() {
       $scope.labels = [];
       $scope.data = [];
@@ -230,16 +269,6 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
     xhttp.send();
     return xhttp.responseXML;
   }
-
-
-  var xmlDoc = loadXMLDoc("data.xml");
-  var x2js = new X2JS();
-  var jsonObj = x2js.xml2json(xmlDoc);
-
-  $scope.operations = jsonObj['account-history'].operations.operation;
-  console.log($scope.operations[0]);
-
-  initData();
 });
 
 pkoCashflowMonitorApp.directive('colorPicker', function () {

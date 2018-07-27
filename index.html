@@ -3,6 +3,7 @@
   <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <script src="js/lib/jquery-3.3.1.min.js"></script>
     <script src="js/lib/xml2json.js"></script>
     <script src="js/lib/angular.min.js"></script>
     <script src="js/lib/chart.min.js"></script>
@@ -14,9 +15,12 @@
 
   <body ng-controller="MainController">
     <div class="content">
+      <div id="chartWrap">
         <canvas id="chart"></canvas>
+      </div>
 
       <div class="oper-left-flower">
+        <div>Pogrupuj operacje</div>
         <form class="new-group" ng-submit="createGroup()">
           <label for="newGroupNameI">Nazwa grupy: </label>
           <input id="newGroupNameI" type="text" ng-model="newGroupName" ng-required="true"/>
@@ -44,9 +48,14 @@
       <div class="oper-desc-search">
         Szukaj:
         <input type="text" ng-model="byDescription"/>
-        <!--<a href="#" ng-click="()" title="Wybierz znalezione operacje">Wybierz</a>-->
-        <!--<a href="#" ng-click="()" title="Ingoruj znalezione operacje">Ignoruj</a>-->
         <a href="#" ng-click="byDescription=undefinied" title="Wyczyść wpisaną frazę szukania">Wyczyść</a>
+      </div>
+
+      <div class="oper-amount-search">
+        Kwota od:
+        <input type="text" ng-model="minAmount" id="minAmountInput"/>
+        Kwota do:
+        <input type="text" ng-model="maxAmount" id="maxAmountInput"/>
       </div>
 
       <div class="oper-counter">
@@ -74,7 +83,7 @@
           </div>
         </div>
 
-        <div ng-repeat="operation in (filteredOpers = (operations | filter:{ description: byDescription }))" ng-class="{'ignored-oper': operation.ignored}" class="oper-row" ng-style="{'background-color': operation.group.color}">
+        <div ng-repeat="operation in (filteredOpers = (operations | filter:searchFilter(byDescription, minAmount, maxAmount) ))" ng-class="{'ignored-oper': operation.ignored}" class="oper-row" ng-style="{'background-color': operation.group.color}">
           <div class="oper-cell oper-date">{{ operation['exec-date'] }}</div>
           <div class="oper-cell oper-date">{{ operation['order-date'] }}</div>
           <div class="oper-cell">{{ operation.type }}</div>
