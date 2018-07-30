@@ -112,14 +112,16 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
     }
   };
 
-  $scope.searchFilter = function(desc, min, max){
+  $scope.searchFilter = function(desc, minAmount, maxAmount, minDate, maxDate){
     var reg = new RegExp(desc, "i");
     return function(item){
       var descCheck = isEmpty(desc) || item.description.match(reg);
-      var minAmountCheck = isEmpty(min) || parseFloat(item.amount.__text) >= parseFloat(min);
-      var maxAmountCheck = isEmpty(max) || parseFloat(item.amount.__text) <= parseFloat(max);
+      var minAmountCheck = isEmpty(minAmount) || parseFloat(item.amount.__text) >= parseFloat(minAmount);
+      var maxAmountCheck = isEmpty(maxAmount) || parseFloat(item.amount.__text) <= parseFloat(maxAmount);
+      var minDateCheck = isEmpty(minDate) || new Date(item['order-date']).getTime() >= new Date(minDate).getTime();
+      var maxDateCheck = isEmpty(maxDate) || new Date(item['order-date']).getTime() <= new Date(maxDate).getTime();
 
-      return descCheck && minAmountCheck && maxAmountCheck;
+      return descCheck && minAmountCheck && maxAmountCheck && minDateCheck && maxDateCheck;
     }
   };
     /*$scope.operations = [

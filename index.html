@@ -45,21 +45,30 @@
         </div>
       </div>
 
-      <div class="oper-desc-search">
-        Szukaj:
-        <input type="text" ng-model="byDescription"/>
-        <a href="#" ng-click="byDescription=undefinied" title="Wyczyść wpisaną frazę szukania">Wyczyść</a>
-      </div>
+      <div class="oper-search-panel">
+        <div class="oper-desc-search">
+          Szukaj w opisie:
+          <input type="text" ng-model="byDescription"/>
+          <a href="#" ng-click="byDescription=undefinied" title="Wyczyść wpisaną frazę szukania">Wyczyść</a>
+        </div>
 
-      <div class="oper-amount-search">
-        Kwota od:
-        <input type="text" ng-model="minAmount" id="minAmountInput"/>
-        Kwota do:
-        <input type="text" ng-model="maxAmount" id="maxAmountInput"/>
-      </div>
+        <div class="oper-amount-search">
+          Kwota od:
+          <input type="text" ng-model="minAmount" id="minAmountInput"/>
+          Kwota do:
+          <input type="text" ng-model="maxAmount" id="maxAmountInput"/>
+        </div>
 
-      <div class="oper-counter">
-        Operacji: {{ operations.length }}
+        <div class="oper-date-search">
+          Data początkowa:
+          <input type="date" ng-model="minDate" id="minDateInput"/>
+          Data końcowa:
+          <input type="date" ng-model="maxDate" id="maxDateInput"/>
+        </div>
+
+        <div class="oper-counter">
+          Operacji: {{ operations.length }}
+        </div>
       </div>
 
       <div class="oper-table">
@@ -83,10 +92,10 @@
           </div>
         </div>
 
-        <div ng-repeat="operation in (filteredOpers = (operations | filter:searchFilter(byDescription, minAmount, maxAmount) ))" ng-class="{'ignored-oper': operation.ignored}" class="oper-row" ng-style="{'background-color': operation.group.color}">
+        <div ng-repeat="operation in (filteredOpers = (operations | filter:searchFilter(byDescription, minAmount, maxAmount, minDate, maxDate) ))" ng-class="{'ignored-oper': operation.ignored}" class="oper-row" ng-style="{'background-color': operation.group.color}">
           <div class="oper-cell oper-date">{{ operation['exec-date'] }}</div>
           <div class="oper-cell oper-date">{{ operation['order-date'] }}</div>
-          <div class="oper-cell">{{ operation.type }}</div>
+          <div class="oper-cell oper-type">{{ operation.type }}</div>
           <div class="oper-cell oper-desc" ng-click="switchLimit(operation)" title="Rozwiń/zwiń opis">{{ operation.description | limitTo: (operation.descLimit) }}</div>
           <div class="oper-cell oper-amount" ng-class="{'positive': operation.amount > 0, 'negative': operation.amount < 0}">{{ operation.amount.__text }}</div>
           <div class="oper-cell">{{ operation['ending-balance'].__text }}</div>
