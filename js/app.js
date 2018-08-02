@@ -112,16 +112,17 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
     }
   };
 
-  $scope.searchFilter = function(desc, minAmount, maxAmount, minDate, maxDate){
+  $scope.searchFilter = function(desc, minAmount, maxAmount, minDate, maxDate, typeQuery){
     var reg = new RegExp(desc, "i");
-    return function(item){
-      var descCheck = isEmpty(desc) || item.description.match(reg);
-      var minAmountCheck = isEmpty(minAmount) || parseFloat(item.amount.__text) >= parseFloat(minAmount);
-      var maxAmountCheck = isEmpty(maxAmount) || parseFloat(item.amount.__text) <= parseFloat(maxAmount);
-      var minDateCheck = isEmpty(minDate) || new Date(item['order-date']).getTime() >= new Date(minDate).getTime();
-      var maxDateCheck = isEmpty(maxDate) || new Date(item['order-date']).getTime() <= new Date(maxDate).getTime();
+    return function(oper){
+      var descCheck = isEmpty(desc) || oper.description.match(reg);
+      var minAmountCheck = isEmpty(minAmount) || parseFloat(oper.amount.__text) >= parseFloat(minAmount);
+      var maxAmountCheck = isEmpty(maxAmount) || parseFloat(oper.amount.__text) <= parseFloat(maxAmount);
+      var minDateCheck = isEmpty(minDate) || new Date(oper['order-date']).getTime() >= new Date(minDate).getTime();
+      var maxDateCheck = isEmpty(maxDate) || new Date(oper['order-date']).getTime() <= new Date(maxDate).getTime();
+      var typeCheck = isEmpty(typeQuery) || typeQuery[0] == '' || typeQuery.indexOf(oper.type) > -1;
 
-      return descCheck && minAmountCheck && maxAmountCheck && minDateCheck && maxDateCheck;
+      return descCheck && minAmountCheck && maxAmountCheck && minDateCheck && maxDateCheck && typeCheck;
     }
   };
     /*$scope.operations = [
@@ -217,7 +218,7 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
   }
 
   function isEmpty(val) {
-    return val === undefined || val === null || val === "";
+    return val === undefined || val === null || val === "" || val.length === 0;
   }
 
   function initData() {
@@ -225,6 +226,13 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
       $scope.data = [];
 
       // todo posortowac xml po order-date
+    /*$scope.operations.sort(function(oper1, oper2){
+      var oper1Time = new Date(oper1['order-date']).getTime(), oper2Time = new Date(oper2['order-date']).getTime();
+      if(oper1Time < oper2Time) return -1;
+      if(oper1Time > oper2Time) return 1;
+      return 0;
+    });*/
+
     for (var i = 0; i < $scope.operations.length; i++) {
       var oper = $scope.operations[i];
       oper.descLimit = DESC_LIMIT;

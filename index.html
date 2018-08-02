@@ -66,6 +66,17 @@
           <input type="date" ng-model="maxDate" id="maxDateInput"/>
         </div>
 
+        <div class="oper-type-search">
+          <label for="typeQuerySel">Typ operacji:</label>
+          <select multiple ng-model="typeQuery" id="typeQuerySel">
+            <option value="" ng-click="typeQuery=['']">Wszystkie typy</option>
+            <option value="Płatność kartą">Płatność kartą</option>
+            <option value="Przelew z rachunku">Przelew z rachunku</option>
+            <option value="Przelew na rachunek">Przelew na rachunek</option>
+            <option value="Wypłata z bankomatu">Wypłata z bankomatu</option>
+          </select>
+        </div>
+
         <div class="oper-counter">
           Operacji: {{ operations.length }}
         </div>
@@ -92,7 +103,7 @@
           </div>
         </div>
 
-        <div ng-repeat="operation in (filteredOpers = (operations | filter:searchFilter(byDescription, minAmount, maxAmount, minDate, maxDate) ))" ng-class="{'ignored-oper': operation.ignored}" class="oper-row" ng-style="{'background-color': operation.group.color}">
+        <div ng-repeat="operation in (filteredOpers = (operations | filter:searchFilter(byDescription, minAmount, maxAmount, minDate, maxDate, typeQuery) ))" ng-class="{'ignored-oper': operation.ignored}" class="oper-row" ng-style="{'background-color': operation.group.color}">
           <div class="oper-cell oper-date">{{ operation['exec-date'] }}</div>
           <div class="oper-cell oper-date">{{ operation['order-date'] }}</div>
           <div class="oper-cell oper-type">{{ operation.type }}</div>
@@ -120,6 +131,5 @@
         <div class="oper-row-last"></div>
       </div>
     </div>
-    <script src="js/non_ang.js"></script>
   </body>
 </html>
