@@ -169,3 +169,15 @@ html {
   height: 87px;
   overflow-y:hidden;
 }
+
+.fas, .far {
+  cursor: pointer;
+}
+
+.icons-wrap {
+  padding-top: 2px;
+}
+
+.head-icons {
+  text-align: center;
+}

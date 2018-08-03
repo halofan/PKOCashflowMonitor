@@ -64,6 +64,27 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
     }
   };
 
+  $scope.unignoreGroup = function(operGroup) {
+    for (var i = 0; i < operGroup.operations.length; i++) {
+      var oper = operGroup.operations[i];
+      oper.ignored = false;
+    }
+  };
+
+  $scope.checkGroup = function(operGroup) {
+    for (var i = 0; i < operGroup.operations.length; i++) {
+      var oper = operGroup.operations[i];
+      oper.marked = true;
+    }
+  };
+
+  $scope.uncheckGroup = function(operGroup) {
+    for (var i = 0; i < operGroup.operations.length; i++) {
+      var oper = operGroup.operations[i];
+      oper.marked = false;
+    }
+  };
+
   $scope.groupSum = function(operGroup) {
     var groupSum = 0;
 
@@ -109,6 +130,20 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
     for (var i = 0; i < $scope.filteredOpers.length; i++) {
       var oper = $scope.filteredOpers[i];
       oper.marked = false;
+    }
+  };
+
+  $scope.ignoreFiltred = function() {
+    for (var i = 0; i < $scope.filteredOpers.length; i++) {
+      var oper = $scope.filteredOpers[i];
+      oper.ignored = true;
+    }
+  };
+
+  $scope.unignoreFiltred = function() {
+    for (var i = 0; i < $scope.filteredOpers.length; i++) {
+      var oper = $scope.filteredOpers[i];
+      oper.ignored = false;
     }
   };
 
