@@ -282,7 +282,7 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
               labels: $scope.labels,
               datasets: [{
                   data: $scope.data,
-                  backgroundColor: 'rgb(176, 255, 233, 0.41)',
+                  backgroundColor: 'rgb(50, 0, 57, 0.41)',
                   borderWidth: 1
               }]
           },
@@ -294,6 +294,18 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
               legend: {
                 display: false
               },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  fontColor: "white"
+                }
+              }],
+              xAxes: [{
+                ticks: {
+                  fontColor: "white"
+                }
+              }]
+            },
               elements: {
                   line: {
                       tension: 0

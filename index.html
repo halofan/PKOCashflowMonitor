@@ -22,7 +22,7 @@
         <canvas id="chart"></canvas>
       </div>
 
-      <div class="oper-left-flower">
+      <div id="oper-left-flower">
         <div>Pogrupuj operacje</div>
         <form class="new-group" ng-submit="createGroup()">
           <label for="newGroupNameI">Nazwa grupy: </label>
@@ -103,16 +103,16 @@
               <i class="fas fa-times-circle" title="Nie ignoruj wszystkich" ng-click="unignoreFiltred()"></i>
             </span>
           </div>
-          <div class="oper-head"> Data wykonania </div>
-          <div class="oper-head"> Data zlecenia </div>
-          <div class="oper-head"> Typ operacji </div>
-          <div class="oper-head"> Opis operacji
+          <div class="oper-head head-exec-date"> Data wykonania </div>
+          <div class="oper-head head-order-date"> Data zlecenia </div>
+          <div class="oper-head head-type"> Typ operacji </div>
+          <div class="oper-head head-desc"> Opis operacji
             <span class="icons">
               <span class="icon" title="Rozwiń/zwiń wszystkie opisy">&#8661;</span> <!--todo-->
             </span>
           </div>
-          <div class="oper-head"> Wartość (zł) </div>
-          <div class="oper-head"> Saldo (zł) </div>
+          <div class="oper-head head-amount"> Wartość (zł) </div>
+          <div class="oper-head head-balance"> Saldo (zł) </div>
         </div>
 
         <div ng-repeat="operation in (filteredOpers = (operations | filter:searchFilter(byDescription, minAmount, maxAmount, minDate, maxDate, typeQuery) ))" ng-class="{'ignored-oper': operation.ignored}" class="oper-row" ng-style="{'background-color': operation.group.color}">
@@ -122,12 +122,12 @@
           <div class="oper-cell">
             <input type="checkbox" ng-model="operation.ignored" ng-click="ignoredChange(operation)"/>
           </div>
-          <div class="oper-cell oper-date">{{ operation['exec-date'] }}</div>
-          <div class="oper-cell oper-date">{{ operation['order-date'] }}</div>
+          <div class="oper-cell oper-exec-date">{{ operation['exec-date'] }}</div>
+          <div class="oper-cell oper-order-date">{{ operation['order-date'] }}</div>
           <div class="oper-cell oper-type">{{ operation.type }}</div>
           <div class="oper-cell oper-desc" ng-click="switchLimit(operation)" title="Rozwiń/zwiń opis">{{ operation.description | limitTo: (operation.descLimit) }}</div>
           <div class="oper-cell oper-amount" ng-class="{'positive': operation.amount > 0, 'negative': operation.amount < 0}">{{ operation.amount.__text }}</div>
-          <div class="oper-cell oper-cell-last">{{ operation['ending-balance'].__text }}</div>
+          <div class="oper-cell oper-balance oper-cell-last">{{ operation['ending-balance'].__text }}</div>
         </div>
 
         <div class="oper-row">
