@@ -85,6 +85,16 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
     }
   };
 
+  $scope.deleteGroup = function(operGroup) {
+    $scope.groups.splice($scope.groups.indexOf(operGroup), 1);
+    for (var i = 0; i < $scope.operations.length; i++) {
+      var oper = $scope.operations[i];
+      if (oper.group == operGroup) {
+        oper.group = undefined;
+      }
+    }
+  };
+
   $scope.groupSum = function(operGroup) {
     var groupSum = 0;
 
@@ -94,6 +104,10 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
     }
 
     return groupSum;
+  };
+
+  $scope.clear = function(val) {
+    $scope[val] = undefined;
   };
 
   $scope.switchLimit = function(operation) {

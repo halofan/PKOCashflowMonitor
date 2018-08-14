@@ -115,6 +115,27 @@ body {
   font-weight: bold;
 }
 
+.oper-search-panel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  background-color: #f7eec7;
+  border: 1px solid #B1A25E;
+  padding: 10px;
+}
+
+.oper-search-panel label {
+  padding-right: 5px;
+}
+
+.oper-min-date, .oper-max-date, .oper-min-amount, .oper-max-amount, .oper-type-search, .oper-desc-search {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
 .oper-amount.positive {
   color: forestgreen;
 }

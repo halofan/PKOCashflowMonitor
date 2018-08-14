@@ -29,7 +29,6 @@
           <input id="newGroupNameI" type="text" ng-model="newGroupName" ng-required="true"/>
           <input type="submit" title="Stwórz nową grupę z wybranych operacji" value="Stwórz"/>
         </form>
-        <hr ng-if="groups.length" class="oper-group-line">
         <div class="oper-groups">
         <div class="oper-group" ng-repeat="group in groups" ng-style="{background: group.color}">
           <div class="oper-group-label">{{ group.name }} [<span title="Liczba operacji w grupie">{{group.operations.length}}</span>] ({{ groupSum(group) }} PLN)</div>
@@ -53,24 +52,17 @@
       </div>
 
       <div class="oper-search-panel">
-        <div class="oper-desc-search">
-          Szukaj w opisie:
-          <input type="text" ng-model="byDescription"/>
-          <a href="#" ng-click="byDescription=undefinied" title="Wyczyść wpisaną frazę szukania">Wyczyść</a>
-        </div>
-
-        <div class="oper-amount-search">
-          Kwota od:
-          <input type="text" ng-model="minAmount" id="minAmountInput"/>
-          Kwota do:
-          <input type="text" ng-model="maxAmount" id="maxAmountInput"/>
-        </div>
-
         <div class="oper-date-search">
-          Data początkowa:
-          <input type="date" ng-model="minDate" id="minDateInput"/>
-          Data końcowa:
-          <input type="date" ng-model="maxDate" id="maxDateInput"/>
+          <div class="oper-min-date">
+            <label for="minDateInput">Data początkowa:</label>
+            <input type="date" ng-model="minDate" id="minDateInput"/>
+            <i class="fas fa-backspace" title="Wyczyść wartość" ng-click="clear('minDate')"></i>
+          </div>
+          <div class="oper-max-date">
+            <label for="maxDateInput">Data końcowa:</label>
+            <input type="date" ng-model="maxDate" id="maxDateInput"/>
+            <i class="fas fa-backspace" title="Wyczyść wartość" ng-click="clear('maxDate')"></i>
+          </div>
         </div>
 
         <div class="oper-type-search">
@@ -82,6 +74,22 @@
             <option value="Przelew na rachunek">Przelew na rachunek</option>
             <option value="Wypłata z bankomatu">Wypłata z bankomatu</option>
           </select>
+        </div>
+
+        <div class="oper-desc-search">
+          <label for="byDescriptionInput">Szukaj w opisie:</label>
+          <input type="text" ng-model="byDescription" id="byDescriptionInput"/>
+        </div>
+
+        <div class="oper-amount-search">
+          <div class="oper-min-amount">
+            <label for="minAmountInput">Kwota od:</label>
+            <input type="text" ng-model="minAmount" id="minAmountInput"/>
+          </div>
+          <div class="oper-max-amount">
+            <label for="maxAmountInput">Kwota do:</label>
+            <input type="text" ng-model="maxAmount" id="maxAmountInput"/>
+          </div>
         </div>
 
         <div class="oper-counter">
