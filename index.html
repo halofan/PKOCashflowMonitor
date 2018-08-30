@@ -31,7 +31,7 @@
         </form>
         <div class="oper-groups">
         <div class="oper-group" ng-repeat="group in groups" ng-style="{background: group.color}">
-          <div class="oper-group-label">{{ group.name }} [<span title="Liczba operacji w grupie">{{group.operations.length}}</span>] ({{ groupSum(group) }} PLN)</div>
+          <div class="oper-group-label"><span class="oper-group-label-name">{{ group.name }}</span> [<span title="Liczba operacji w grupie">{{group.operations.length}}</span>] ({{ groupSum(group) }} PLN)</div>
           <div class="oper-group-buttons icons-wrap">
             <i class="far fa-check-square" title="Zaznacz" ng-click="checkGroup(group)"></i>
             <i class="fas fa-check-square" title="Odznacz" ng-click="uncheckGroup(group)"></i>

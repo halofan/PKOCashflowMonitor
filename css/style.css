@@ -13,6 +13,13 @@ body {
   background-image: -moz-linear-gradient(top, #5d4660 0%, #f7eec7 100%);
   background-image: -webkit-linear-gradient(top, #5d4660 0%, #f7eec7 100%);
   background-image: linear-gradient(to bottom, #5d4660 0%, #f7eec7 30%);
+  background-attachment:fixed;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 
 .content {
@@ -160,6 +167,7 @@ body {
   margin-top: 15px;
   background-color: #f7eec7;
   border: 1px solid #B1A25E;
+  width: 311px;
 }
 
 .oper-groups {
@@ -236,4 +244,8 @@ body {
 
 .head-icons {
   text-align: center;
+}
+
+.oper-group-label-name {
+  font-weight: bold;
 }

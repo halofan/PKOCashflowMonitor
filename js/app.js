@@ -100,10 +100,12 @@ pkoCashflowMonitorApp.controller('MainController', function PhoneListController(
 
     for (var i = 0; i < operGroup.operations.length; i++) {
       var oper = operGroup.operations[i];
-      groupSum += +oper.amount.__text;
+      if (oper.ignored != true) {
+        groupSum += +oper.amount.__text;
+      }
     }
 
-    return groupSum;
+    return groupSum.toFixed(2);
   };
 
   $scope.clear = function(val) {
